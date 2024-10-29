@@ -1,0 +1,55 @@
+<html>
+
+<head>
+  <title>SAML Demo App using SSOReady</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <main class="grid min-h-full place-items-center py-32 px-8">
+    <div class="text-center">
+      <h1 class="mt-4 text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
+        <!-- the current user gets populated in /ssoready-callback -->
+        {% if user.is_authenticated %}
+        Hello, {{ user.email }}!
+        {% else %}
+        Hello, logged-out user!
+        {% endif %}
+      </h1>
+      <p class="mt-6 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
+        This is a SAML demo app, built using SSOReady.
+      </p>
+
+      <div class="mt-10 max-w-lg mx-auto">
+        <div class="flex gap-x-4 items-center">
+          <!-- submitting this form makes the user's browser do a GET /saml-redirect?email=... -->
+          <form method="get" action="/saml-redirect">
+            <div class="flex gap-x-4 items-center">
+              <label for="email-address" class="sr-only">Email address</label>
+              <input id="email-address" name="email"
+                class="min-w-0 flex-auto rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                value="john.doe@example.com" placeholder="john.doe@example.com" />
+              <button type="submit"
+                class="flex-none rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Log in with SAML
+              </button>
+            </div>
+          </form>
+
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="px-3.5 py-2.5 text-sm font-semibold text-gray-900">
+              Sign out
+            </button>
+          </form>
+        </div>
+
+        <p class="mt-4 text-sm leading-6 text-gray-900">
+          (Try any @example.com or @example.org email address.)
+        </p>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
